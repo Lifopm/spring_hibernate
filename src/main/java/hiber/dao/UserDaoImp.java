@@ -39,12 +39,13 @@ public class UserDaoImp<unchecked> implements UserDao {
 
    @Override
    @Transactional
-   public User getUserByCar(String model, int series) {
+   public List<User> getUserByCar(String model, int series) {
       //"select * from users inner join cars on users.car_id = cars.id where model = \""+model+"\" AND series="+series
-      Query<User> query = sessionFactory.getCurrentSession()
-              .createQuery("from User uz left join fetch cars c where uz.car = c.id");
-      List user = query.getResultList();
-      return null;//(User) query.getResultList();
+      //from User uz left join fetch cars c where uz.id = c.id
+      TypedQuery<User> query = sessionFactory.getCurrentSession()
+              .createQuery("from User uz JOIN FETCH uz.car WHERE uz.car.model=\'" + model + "\' AND uz.car.series=" + series);
+
+      return query.getResultList();
    }
 
    @Override
