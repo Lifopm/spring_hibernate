@@ -17,14 +17,12 @@ import java.util.List;
 @Repository
 public class UserDaoImp<unchecked> implements UserDao {
 
-   Transaction transaction;
 
    @Autowired
    private SessionFactory sessionFactory;
 
    @Override
    public void add(User user) {
-      transaction.begin();;
       sessionFactory.getCurrentSession().save(user);
    }
 
@@ -38,13 +36,13 @@ public class UserDaoImp<unchecked> implements UserDao {
 
 
 
-   //from User as u left join Car as c with c.model = m AND c.series = s
+
    @Override
    @Transactional
    public User getUserByCar(String model, int series) {
-      Query query = sessionFactory.getCurrentSession()
-              .createQuery("from User inner join Car where Car.user = User.car");
-
+      //"select * from users inner join cars on users.car_id = cars.id where model = \""+model+"\" AND series="+series
+      Query<User> query = sessionFactory.getCurrentSession()
+              .createQuery("from User uz left join fetch cars c where uz.car = c.id");
       List user = query.getResultList();
       return null;//(User) query.getResultList();
    }
@@ -56,5 +54,4 @@ public class UserDaoImp<unchecked> implements UserDao {
       TypedQuery<Car> query = sessionFactory.getCurrentSession().createQuery("from Car");
       return query.getResultList();
    }
-
 }

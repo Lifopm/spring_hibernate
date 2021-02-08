@@ -24,6 +24,11 @@ public class User {
 
    public User() {}
 
+   public User(String firstName, String lastName, String email, Car car) {
+      this(firstName, lastName, email);
+      this.car = car;
+   }
+
    public Car getCar() {
       return car;
    }
